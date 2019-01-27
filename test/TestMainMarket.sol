@@ -6,6 +6,7 @@ import "../contracts/MainMarket.sol";
 
 contract TestMainMarket {
 
+    // Requires 'function addShop()'s 'onlyAdmin(msg.sender)' modifier commented out
     function testInternalIDsSetCorrectly() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
 
@@ -20,11 +21,12 @@ contract TestMainMarket {
         );
     }
     
+
     function testItemIDsSetCorrectly() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
 
-        market._addItem(1, "plant", 500);
-        market._addItem(1, "flower", 250);
+        market.addItem(1, "plant", 500);
+        market.addItem(1, "flower", 250);
         uint expected = 250;
         Assert.equal(
             expected,
@@ -33,20 +35,43 @@ contract TestMainMarket {
         );
     }
 
-    // testThree(){
-    //     MainMarket market = MainMarket(DeployedAddresses.MainMarket());
+    function testShopExistenceMappingWorks() public {
+        MainMarket market = MainMarket(DeployedAddresses.MainMarket());
+        
+        bool expected = false;
+        Assert.equal(
+            expected,
+            market.getShopExistence(20),
+            "20th Shop should not yet exist."
+        );
 
-    // }
+    }
 
-    // testFour(){
-    //     MainMarket market = MainMarket(DeployedAddresses.MainMarket());
+    // Requires 'function removeShopOwner()'s 'onlyAdmin(msg.sender)' modifier commented out
+    function testRemoveShopOwnerSucceeds() public {
+        MainMarket market = MainMarket(DeployedAddresses.MainMarket());
 
-    // }
+        market.removeShopOwner(1);
+        address expected = 0x0000000000000000000000000000000000000000;
+        Assert.equal(
+            expected,
+            market.getShopOwner(1),
+            "Shop's owner should be '0x000...'"
+        );
+    }
 
-    // testFive(){
-    //     MainMarket market = MainMarket(DeployedAddresses.MainMarket());
+    // Requires 'function assignShopOwner()'s 'onlyAdmin(msg.sender)' modifier commented out
+    function testAddShopOwnerSucceeds() public {
+        MainMarket market = MainMarket(DeployedAddresses.MainMarket());
 
-    // }
+        market.assignShopOwner(2, 0x0000000000000000000000000000000000000001);
+        address expected = 0x0000000000000000000000000000000000000001;
+        Assert.equal(
+            expected,
+            market.getShopOwner(2),
+            "Shop's owner should be the contract owner's address."
+        );
+    }
 
 }
 
