@@ -1,7 +1,10 @@
+
 pragma solidity ^0.5.0;
 
 /** @title MainMarket */
 contract MainMarket {
+    /** @notice Contract serves as an online marketplace that operates on the blockchain.
+      */
 
     // DECLARATIONS & SETUP--------------------------------------------------------
 
@@ -136,12 +139,11 @@ contract MainMarket {
         function buyItem(uint _shopID, uint _itemID) 
             public 
             payable 
-             //Require sent amount is >= item price.  //Way to send error if require fails?
             ifItemExists(_shopID, _itemID)
+            paidEnough(_shopID, _itemID)
             verifyItemForSale(_shopID, _itemID)
         {
             // Transfer ether of price itemPrice to owner of said Item
-
             address payable _shopOwner = shops[_shopID].shopOwner;
             uint _price = shops[_shopID].localItems[_itemID].itemPrice;
             _shopOwner.transfer(_price);
@@ -156,6 +158,9 @@ contract MainMarket {
 
         // TIER4 - View Functions -------------------------------
 
+        /** @notice Retrieves ShopID of selected shop for verification of internal variable.
+            * @param _shopID specifies target shop
+            */
         function getShopID(uint _shopID) 
             public 
             view 
@@ -165,6 +170,10 @@ contract MainMarket {
             return shops[_shopID].shopID;
         }
 
+        /** @notice Retrieves itemPrice of target item specified by parameters.
+            * @param _shopID specifies target shop
+            * @param _itemID specifies target item
+            */
         function getItemPrice(uint _shopID, uint _itemID)
             public
             view
@@ -174,6 +183,9 @@ contract MainMarket {
             return shops[_shopID].localItems[_itemID].itemPrice;
         }
 
+        /** @notice Retreives whether shop has been created yet as listed in 'existingShops' mapping.
+            * @param _shopID specifies target shop
+            */
         function getShopExistence(uint _shopID) 
             public
             view
@@ -182,6 +194,10 @@ contract MainMarket {
             return existingShops[_shopID];
         }
 
+
+        /** @notice Retreives target shop owner's address.
+            * @param _shopID specifies target shop
+            */
         function getShopOwner(uint _shopID) 
             public
             view
