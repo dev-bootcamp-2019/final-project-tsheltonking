@@ -69,7 +69,7 @@ contract TestMainMarket {
         Assert.equal(
             expected,
             market.getShopOwner(2),
-            "Shop's owner should be the contract owner's address."
+            "Shop's owner should be '0x0000000000000000000000000000000000000001'"
         );
     }
 
