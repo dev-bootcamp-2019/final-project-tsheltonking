@@ -1,9 +1,11 @@
+
+// CONTRACT --------------------------------------------------------------------------------------------
+
+
 pragma solidity ^0.5.0;
 
 /** @title MainMarket */
 contract MainMarket {
-    /** @notice ... 
-      */
 
     // DECLARATIONS & SETUP--------------------------------------------------------
 
@@ -41,7 +43,7 @@ contract MainMarket {
     enum State {
         ForSale,
         Sold,
-	Unavailable
+	    Unavailable
     }
     
     struct Item {
@@ -68,7 +70,7 @@ contract MainMarket {
             public
             // onlyAdmin(msg.sender)  
         {
-            shops[shopCount] = Shop({ shopID: shopCount, shopOwner: none, localItemCount: 0});  
+            shops[shopCount] = Shop({ shopID: shopCount, shopOwner: msg.sender, localItemCount: 0});  //msg.sender may need change
             emit NewShop(shopCount);
             existingShops[shopCount] = true;
             shopCount = shopCount + 1;
@@ -81,7 +83,7 @@ contract MainMarket {
             */
         function assignShopOwner(uint _shopID, address payable _address)
             public
-            onlyAdmin(msg.sender) 
+            // onlyAdmin(msg.sender) 
         {     
             shops[_shopID].shopOwner = _address;
         } 
@@ -90,7 +92,7 @@ contract MainMarket {
             * @param _shopID specifies target 'Shop' in 'shops'.
             */
         function removeShopOwner(uint _shopID) 
-            onlyAdmin(msg.sender) 
+            // onlyAdmin(msg.sender) 
             public 
         {
             shops[_shopID].shopOwner = none;
@@ -104,8 +106,9 @@ contract MainMarket {
             * @param _name used as a description for the item
             * @param _price used to set price of item
             */
-        function _addItem(uint _shopID, string memory _name, uint _price) 
+        function addItem(uint _shopID, string memory _name, uint _price) 
             public 
+            ifShopExists(_shopID)
             onlyShopOwner(_shopID) 
         {
             emit ForSale(_shopID, shops[_shopID].localItemCount );
@@ -118,8 +121,9 @@ contract MainMarket {
             * @param _shopID specifies target shop
             * @param _itemID specifies item within target shop
             */
-        function _removeItem(uint _shopID, uint _itemID)
+        function removeItem(uint _shopID, uint _itemID)
             public 
+            ifItemExists(_shopID, _itemID)
             onlyShopOwner(_shopID) 
             verifyItemForSale(_shopID, _itemID)
         { 
@@ -137,6 +141,7 @@ contract MainMarket {
             public 
             payable 
              //Require sent amount is >= item price.  //Way to send error if require fails?
+            ifItemExists(_shopID, _itemID)
             verifyItemForSale(_shopID, _itemID)
         {
             // Transfer ether of price itemPrice to owner of said Item
@@ -171,6 +176,22 @@ contract MainMarket {
             returns(uint)
         {
             return shops[_shopID].localItems[_itemID].itemPrice;
+        }
+
+        function getShopExistence(uint _shopID) 
+            public
+            view
+            returns(bool)
+        {
+            return existingShops[_shopID];
+        }
+
+        function getShopOwner(uint _shopID) 
+            public
+            view
+            returns(address)
+        {
+            return shops[_shopID].shopOwner;
         }
 
 
