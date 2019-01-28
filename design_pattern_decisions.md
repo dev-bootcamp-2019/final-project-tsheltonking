@@ -1,6 +1,6 @@
 # Design Pattern Decisions
 
-## Contract Layout
+## MainMarket Contract Layout
 
 ###  Readability
 
@@ -16,12 +16,18 @@
   The heirarchical nature of contract structs (Item mappings are members of Shop mappings) allows most elements of the structs to be accessed by functions using the same two parameters. This was done in the effort to simplify the understanding needed to call and interact with contract functions.
   - While this method can make calling functions more intuitive it's notable that many of the function definitions may appear less readable due to their having to work down the mapping and member heirarchy in order to reference objects relevant to the funciton.
 
-## Contract Behavior
+## MainMarket Contract Behavior
 
-For safety, the 'existingShops' and 'existingItems' mappings were made to enable modifiers to check if a given shop or item has been created and thus prevent functions from attempting to edit or use data from struct instances that do not exist. 
+### Summary/Market Behavior
 
-Calling functions attempts to be made simple by 
-Funcitonality attmepts to be made explicit by requiring a standard set of parameters for most functions, namely 
+### Safety Measures
+
+  - The shopEverything() and resumeEverything() functions are used to create a modifier for all state-changing functions that will prevent them from being called in the event that the contract enters an unintended state. View functions may still be called at any time.
+
+  - The 'existingShops' and 'existingItems' mappings were made to enable modifiers to check if a given shop or item has been created and thus prevent functions from attempting to edit or use data from struct instances that do not exist. 
+
+
+
 
 ## Circuit Breaker
   Instead of toggling the entire contract's functionality with one function, two functions ('stopEverything()' & 'resumeEverything()') were used in the design of the contract's circuit breaker system to ensure that their behavior is explicit to the person calling them.
