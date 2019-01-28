@@ -2,7 +2,7 @@
 
 ## MainMarket Contract Behavior
 
-## Summary
+### Summary
 
 The contract serves as a digital marketplace where shoppers can purchase goods posted as offerings by store owners and where administrator accounts can manage who has permissions of ownership over shops, items, etc.
 
