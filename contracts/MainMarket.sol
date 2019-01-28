@@ -1,7 +1,3 @@
-
-
-
-
 pragma solidity ^0.5.0;
 
 /** @title MainMarket */
@@ -75,7 +71,7 @@ contract MainMarket {
         function addShop() 
             public
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
+            onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
         {
             shops[shopCount] = Shop({ shopID: shopCount, shopOwner: msg.sender, localItemCount: 0});
             emit NewShop(shopCount);
@@ -90,7 +86,7 @@ contract MainMarket {
             */
         function assignShopOwner(uint _shopID, address payable _address)
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
+            onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
             public
         {     
             shops[_shopID].shopOwner = _address;
@@ -101,7 +97,7 @@ contract MainMarket {
             */
         function removeShopOwner(uint _shopID) 
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
+            onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
             public 
         {
             shops[_shopID].shopOwner = none;
@@ -177,6 +173,7 @@ contract MainMarket {
             paidEnough(_shopID, _itemID)
             verifyItemForSale(_shopID, _itemID)
         {
+            require(shops[_shopID].shopOwner != none, "No one owns that shop!");
             // Transfer ether of price itemPrice to owner of said Item
             address payable _shopOwner = shops[_shopID].shopOwner;
             uint _price = shops[_shopID].localItems[_itemID].itemPrice;
