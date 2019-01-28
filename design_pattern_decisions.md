@@ -26,15 +26,7 @@ The contract serves as a digital marketplace where shoppers can purchase goods p
 
 ### Safety Measures
 
-  - The shopEverything() and resumeEverything() functions are used to create a modifier for all state-changing functions that will prevent them from being called in the event that the contract enters an unintended state. View functions may still be called at any time.
+  - The shopEverything() and resumeEverything() functions serve as a circuit breaker and are used to create a modifier for all state-changing functions that will prevent them from being called in the event that the contract enters an unintended state. View functions may still be called at any time.
 
   - The 'existingShops' and 'existingItems' mappings were made to enable modifiers to check if a given shop or item has been created and thus prevent functions from attempting to edit or use data from struct instances that do not exist. 
 
-
-
-
-## Circuit Breaker
-  Instead of toggling the entire contract's functionality with one function, two functions ('stopEverything()' & 'resumeEverything()') were used in the design of the contract's circuit breaker system to ensure that their behavior is explicit to the person calling them.
-  
-  
-  with accounts being able to acquire their own shops upon request
