@@ -17,16 +17,27 @@ This contract serves as an online marketplace that operates on the blockchain. I
   - Smart Contract code should be commented according to the specs in the documentation.
   - Create at least 5 tests for the smart contract.
   - Include a document called design_pattern_desicions.md that explains choice to use present design patterns.
+  - Include a document called avoiding_common_attacks.md that explains measures taken to ensure contracts are not susceptible to common attacks.
 
 
   
 ### To Do
 
   
-  - Include a document called avoiding_common_attacks.md that explains measures taken to ensure contracts are not susceptible to common attacks.
+
   - Use a development server to serve the front end interface of the application.
   - If the project does not require a library or an EthPM package, demonstrate how to do that in a contract called LibraryDemo.sol
 
 ## How to set it Up
 
+The following commands will ensure you have both ganache and truffle installed which are required for initial tests with the project.
+### Installing Truffle
+```
+npm install -g truffle
+```
+### Installing Ganache
+```
+npm install -g ganache-cli
+```
 
+Download this repository or clone it to a new project folder using
