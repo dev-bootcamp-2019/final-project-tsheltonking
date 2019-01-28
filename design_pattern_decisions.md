@@ -1,10 +1,8 @@
 # Design Pattern Decisions
 
-### Summary
+## Summary
 
-The contract serves as a digital marketplace which attempts to be as 
-The owner cannot be changed 
-with editable permissions and if indirectly
+The contract serves as a digital marketplace where shoppers can purchase goods posted as offerings by store owners and where administrator accounts can manage who has permissions of ownership over shops, items, etc.
 
 ## MainMarket Contract Layout
 
