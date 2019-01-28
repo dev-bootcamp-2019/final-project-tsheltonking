@@ -30,12 +30,15 @@ This contract serves as an online marketplace that operates on the blockchain. I
 
 ## How to set it Up
 
+### Install Node Modules
+
 The following commands will ensure you have both ganache and truffle installed which are required for initial tests with the project.
-### Installing Truffle
+
+Truffle:
 ```
 npm install -g truffle
 ```
-### Installing Ganache
+Ganache:
 ```
 npm install -g ganache-cli
 ```
