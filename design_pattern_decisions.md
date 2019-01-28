@@ -1,18 +1,10 @@
 # Design Pattern Decisions
 
-## MainMarket Contract Behavior
-
-### Summary
+## Summary
 
 The contract serves as a digital marketplace where shoppers can purchase goods posted as offerings by store owners and where administrator accounts can manage who has permissions of ownership over shops, items, etc.
 
-### Safety Measures
-
-  - The shopEverything() and resumeEverything() functions serve as a circuit breaker and are used to create a modifier for all state-changing functions that will prevent them from being called in the event that the contract enters an unintended state. View functions may still be called at any time.
-
-  - The 'existingShops' and 'existingItems' mappings were made to enable modifiers to check if a given shop or item has been created and thus prevent functions from attempting to edit or use data from struct instances that do not exist. 
-
-## MainMarket Contract Layout
+## MainMarket Contract Layout & Behavior
 
 ###  Readability
 
@@ -28,4 +20,8 @@ The contract serves as a digital marketplace where shoppers can purchase goods p
   The heirarchical nature of contract structs (Item mappings are members of Shop mappings) allows most elements of the structs to be accessed by functions using the same two parameters. This was done in the effort to simplify the understanding needed to call and interact with contract functions.
   - While this method can make calling functions more intuitive it's notable that many of the function definitions may appear less readable due to their having to work down the mapping and member heirarchy in order to reference objects relevant to the funciton.
 
+### Safety Measures
 
+  - The shopEverything() and resumeEverything() functions serve as a circuit breaker and are used to create a modifier for all state-changing functions that will prevent them from being called in the event that the contract enters an unintended state. View functions may still be called at any time.
+
+  - The 'existingShops' and 'existingItems' mappings were made to enable modifiers to check if a given shop or item has been created and thus prevent functions from attempting to edit or use data from struct instances that do not exist. 
