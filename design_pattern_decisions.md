@@ -2,7 +2,7 @@
 
 ## Summary
 
-The contract serves as a digital marketplace where shoppers can purchase goods posted as offerings by store owners and where administrator accounts can manage who has permissions of ownership over shops, items, etc.
+The contract serves as a digital marketplace where shoppers can purchase goods posted as offerings by store owners and where administrator accounts can manage who has permissions of ownership over shops, items, etc. Currently the method of purchate (e.g. changing an item's state to State.sold) is a placeholder meant to indicate how a contract would verify a transfer of ownership over one item from one account to another.
 
 ## MainMarket Contract Layout & Behavior
 
