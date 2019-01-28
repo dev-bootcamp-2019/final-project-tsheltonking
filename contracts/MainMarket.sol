@@ -1,4 +1,7 @@
 
+
+
+
 pragma solidity ^0.5.0;
 
 /** @title MainMarket */
@@ -20,6 +23,7 @@ contract MainMarket {
     modifier contractIsEnabled(bool _circuitBreaker){require(_circuitBreaker == false, "Circuit Breaker must be flipped"); _;}
     modifier onlyAdmin(address _address){require(isAdmin[_address] == true); _;}
     modifier onlyShopOwner(uint _shopID){require(shops[_shopID].shopOwner == msg.sender); _;} 
+    modifier cannotUseOwner(address _address){require(_address != owner, "Address must not be owner."); _;}
 
     modifier verifyItemUnavailable(uint _shopID, uint _itemID){require(shops[_shopID].localItems[_itemID].state == State.Unavailable, "Item is not Unavailable"); _;}
     modifier verifyItemForSale(uint _shopID, uint _itemID){require(shops[_shopID].localItems[_itemID].state == State.ForSale, "Item is not for sale."); _;}
@@ -28,8 +32,6 @@ contract MainMarket {
     modifier paidEnough(uint _shopID, uint _itemID){require(msg.value >= shops[_shopID].localItems[_itemID].itemPrice, "Value is not enough"); _;}
     modifier ifShopExists(uint _shopID){require(existingShops[_shopID] == true, "Shop has not been made yet"); _;} 
     modifier ifItemExists(uint _shopID, uint _itemID){require(shops[_shopID].existingItems[_itemID] == true, "An Item with that value does not exist in this shop"); _;}
-
-
 
     event ForSale(uint _shopID, uint _itemID);
     event Sold(uint _shopID, uint _itemID); 
@@ -73,9 +75,9 @@ contract MainMarket {
         function addShop() 
             public
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender)  
+            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
         {
-            shops[shopCount] = Shop({ shopID: shopCount, shopOwner: msg.sender, localItemCount: 0});  //msg.sender may need change
+            shops[shopCount] = Shop({ shopID: shopCount, shopOwner: msg.sender, localItemCount: 0});
             emit NewShop(shopCount);
             existingShops[shopCount] = true;
             shopCount = shopCount + 1;
@@ -88,7 +90,7 @@ contract MainMarket {
             */
         function assignShopOwner(uint _shopID, address payable _address)
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender) 
+            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
             public
         {     
             shops[_shopID].shopOwner = _address;
@@ -99,11 +101,32 @@ contract MainMarket {
             */
         function removeShopOwner(uint _shopID) 
             contractIsEnabled(circuitBreaker)  
-            // onlyAdmin(msg.sender) 
+            // onlyAdmin(msg.sender)                    // LINE SHOULD BE COMMENTED OUT BEFORE TRUFFLE TEST
             public 
         {
             shops[_shopID].shopOwner = none;
         } 
+
+        /** @notice Adds admin to isAdmin.
+            * @param _address specifies new admin address
+            */
+        function addAdmin(address _address)
+            public
+            onlyAdmin(msg.sender)
+        {
+            isAdmin[_address] = true;
+        }
+
+        /** @notice Removes admin from isAdmin.
+            * @param _address specifies address to remove
+            */
+        function removeAdmin(address _address)
+            public
+            onlyAdmin(msg.sender)
+            cannotUseOwner(_address)
+        {
+            isAdmin[_address] = false;
+        }
 
 
     // TIER2 - Shop Owner Functions ----------------------------
@@ -158,7 +181,7 @@ contract MainMarket {
             address payable _shopOwner = shops[_shopID].shopOwner;
             uint _price = shops[_shopID].localItems[_itemID].itemPrice;
             _shopOwner.transfer(_price);
-  
+            //Sell item
             shops[_shopID].localItems[_itemID].state = State.Sold;
             emit Sold(_shopID, _itemID);
             //refund extra ether
