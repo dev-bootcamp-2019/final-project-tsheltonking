@@ -1,4 +1,7 @@
 
+
+
+
 pragma solidity ^0.5.0;
 
 /** @title MainMarket */
@@ -9,13 +12,15 @@ contract MainMarket {
     // DECLARATIONS & SETUP--------------------------------------------------------
 
     address payable none = 0x0000000000000000000000000000000000000000;
+    bool circuitBreaker;
     address payable public owner;
     uint public shopCount;
 
     mapping (address => bool) public isAdmin;
     mapping (uint => Shop) public shops;
-    mapping (uint => bool) public existingShops;//new
-    
+    mapping (uint => bool) public existingShops;
+
+    modifier contractIsEnabled(bool _circuitBreaker){require(_circuitBreaker == false, "Circuit Breaker must be flipped"); _;}
     modifier onlyAdmin(address _address){require(isAdmin[_address] == true); _;}
     modifier onlyShopOwner(uint _shopID){require(shops[_shopID].shopOwner == msg.sender); _;} 
 
@@ -27,14 +32,17 @@ contract MainMarket {
     modifier ifShopExists(uint _shopID){require(existingShops[_shopID] == true, "Shop has not been made yet"); _;} 
     modifier ifItemExists(uint _shopID, uint _itemID){require(shops[_shopID].existingItems[_itemID] == true, "An Item with that value does not exist in this shop"); _;}
 
+
+
     event ForSale(uint _shopID, uint _itemID);
     event Sold(uint _shopID, uint _itemID); 
-    event NewShop(uint _shopID);   
+    event NewShop(uint _shopID); 
 
     constructor() public {
         owner = msg.sender; 
         isAdmin[owner] = true; 
         shopCount = 0;  
+        circuitBreaker = false;
     }
 
     // STRUCTS & FUNCTIONS---------------------------------------------------------
@@ -67,6 +75,7 @@ contract MainMarket {
             */
         function addShop() 
             public
+            contractIsEnabled(circuitBreaker)  
             // onlyAdmin(msg.sender)  
         {
             shops[shopCount] = Shop({ shopID: shopCount, shopOwner: msg.sender, localItemCount: 0});  //msg.sender may need change
@@ -81,8 +90,9 @@ contract MainMarket {
             * @param _address specifies new owner of Shop
             */
         function assignShopOwner(uint _shopID, address payable _address)
-            public
+            contractIsEnabled(circuitBreaker)  
             // onlyAdmin(msg.sender) 
+            public
         {     
             shops[_shopID].shopOwner = _address;
         } 
@@ -91,6 +101,7 @@ contract MainMarket {
             * @param _shopID specifies target 'Shop' in 'shops'.
             */
         function removeShopOwner(uint _shopID) 
+            contractIsEnabled(circuitBreaker)  
             // onlyAdmin(msg.sender) 
             public 
         {
@@ -107,6 +118,7 @@ contract MainMarket {
             */
         function addItem(uint _shopID, string memory _name, uint _price) 
             public 
+            contractIsEnabled(circuitBreaker)
             ifShopExists(_shopID)
             onlyShopOwner(_shopID) 
         {
@@ -122,6 +134,7 @@ contract MainMarket {
             */
         function removeItem(uint _shopID, uint _itemID)
             public 
+            contractIsEnabled(circuitBreaker)
             ifItemExists(_shopID, _itemID)
             onlyShopOwner(_shopID) 
             verifyItemForSale(_shopID, _itemID)
@@ -139,6 +152,7 @@ contract MainMarket {
         function buyItem(uint _shopID, uint _itemID) 
             public 
             payable 
+            contractIsEnabled(circuitBreaker)
             ifItemExists(_shopID, _itemID)
             paidEnough(_shopID, _itemID)
             verifyItemForSale(_shopID, _itemID)
@@ -156,7 +170,7 @@ contract MainMarket {
         }
 
 
-        // TIER4 - View Functions -------------------------------
+    // TIER4 - View Functions -------------------------------
 
         /** @notice Retrieves ShopID of selected shop for verification of internal variable.
             * @param _shopID specifies target shop
@@ -205,6 +219,16 @@ contract MainMarket {
         {
             return shops[_shopID].shopOwner;
         }
+
+    // Emergency Functions -----------------------------
+
+    function stopEverything() public onlyAdmin(msg.sender) {
+        circuitBreaker = true;
+    }
+
+    function resumeEverything() public onlyAdmin(msg.sender) {
+        circuitBreaker = false;
+    }
 
 
 } // CONTRACT END---------------------------------------------------------------------------------------
