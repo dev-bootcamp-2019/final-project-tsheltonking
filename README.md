@@ -4,7 +4,7 @@
 
 This contract serves as an online marketplace that operates on the blockchain. It provides a list of stores on a central marketplace (the contract) where shoppers can purchase goods posted by store owners, who may be assigned or removed ownership over each store by a list of accounts with admin permissions also stored on the blockchain. 
 
-### Notice
+### Notices
   
   - The provided Test contract needs the ability to access admin functions in order to properly test the contract logic. *Before running the* ```'truffle test'``` *command, please comment out any* ```'onlyAdmin(msg.sender)'``` *modifiers* within the MainMarket.sol contract. These modifiers can be found in functions under the ```'// TIER1 - Admin functions'``` section.
 
