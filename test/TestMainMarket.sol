@@ -6,6 +6,7 @@ import "../contracts/MainMarket.sol";
 
 contract TestMainMarket {
 
+    // Used to test that Shop structs are created and correctly setting internal variables in this case, their 'ID'
     // Requires 'function addShop()'s 'onlyAdmin(msg.sender)' modifier commented out
     function testInternalIDsSetCorrectly() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
@@ -21,7 +22,7 @@ contract TestMainMarket {
         );
     }
     
-
+    // Used to test that Item structs are created correctly setting internal variables - in this case, their 'ID'
     function testItemIDsSetCorrectly() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
 
@@ -35,6 +36,7 @@ contract TestMainMarket {
         );
     }
 
+    // Verifies shop existence mapping can be checked for use in modifiers
     function testShopExistenceMappingWorks() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
         
@@ -47,6 +49,7 @@ contract TestMainMarket {
 
     }
 
+    // Verifies simple contract logic from removeShopOwner is behaving as expected
     // Requires 'function removeShopOwner()'s 'onlyAdmin(msg.sender)' modifier commented out
     function testRemoveShopOwnerSucceeds() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
@@ -60,6 +63,7 @@ contract TestMainMarket {
         );
     }
 
+    // Verifies simple contract logic from addShopOwner is behaving as expected
     // Requires 'function assignShopOwner()'s 'onlyAdmin(msg.sender)' modifier commented out
     function testAddShopOwnerSucceeds() public {
         MainMarket market = MainMarket(DeployedAddresses.MainMarket());
@@ -69,7 +73,7 @@ contract TestMainMarket {
         Assert.equal(
             expected,
             market.getShopOwner(2),
-            "Shop's owner should be '0x0000000000000000000000000000000000000001'"
+            "Shop's owner should be the contract owner's address."
         );
     }
 
