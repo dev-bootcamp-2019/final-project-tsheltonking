@@ -1,5 +1,11 @@
 # Design Pattern Decisions
 
+### Summary
+
+The contract serves as a digital marketplace which attempts to be as 
+The owner cannot be changed 
+with editable permissions and if indirectly
+
 ## MainMarket Contract Layout
 
 ###  Readability
@@ -18,7 +24,7 @@
 
 ## MainMarket Contract Behavior
 
-### Summary/Market Behavior
+
 
 ### Safety Measures
 
@@ -31,3 +37,6 @@
 
 ## Circuit Breaker
   Instead of toggling the entire contract's functionality with one function, two functions ('stopEverything()' & 'resumeEverything()') were used in the design of the contract's circuit breaker system to ensure that their behavior is explicit to the person calling them.
+  
+  
+  with accounts being able to acquire their own shops upon request
