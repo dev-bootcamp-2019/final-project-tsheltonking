@@ -4,7 +4,7 @@
 
 This contract serves as an online marketplace that operates on the blockchain. It provides a list of stores on a central marketplace (the contract) where shoppers can purchase goods posted by store owners, who may be assigned or removed ownership over each store by a list of accounts with admin permissions also stored on the blockchain. 
 
-### Notices
+### Notice
   
   - The provided Test contract needs the ability to access admin functions in order to properly test the contract logic. *Before running the* ```'truffle test'``` *command, please comment out any* ```'onlyAdmin(msg.sender)'``` *modifiers* within the MainMarket.sol contract. These modifiers can be found in functions under the ```'// TIER1 - Admin functions'``` section.
 
@@ -19,11 +19,7 @@ This contract serves as an online marketplace that operates on the blockchain. I
   - Include a document called design_pattern_desicions.md that explains choice to use present design patterns.
   - Include a document called avoiding_common_attacks.md that explains measures taken to ensure contracts are not susceptible to common attacks.
 
-
-  
 ### To Do
-
-  
 
   - Use a development server to serve the front end interface of the application.
   - If the project does not require a library or an EthPM package, demonstrate how to do that in a contract called LibraryDemo.sol
@@ -43,4 +39,6 @@ npm install -g truffle
 npm install -g ganache-cli
 ```
 
-Download this repository or clone it to a new project folder using
+Once done, download or clone this repository to a new project folder.
+From there you can either open a terminal, run ganache-cli, then navigate to the project folder and use truffle commands - or review contract code using an editor of your choice. See the notice above before running the ``'truffle test'`` command.
+
