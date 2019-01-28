@@ -42,3 +42,10 @@ npm install -g ganache-cli
 Once done, download or clone this repository to a new project folder.
 From there you can either open a terminal, run ganache-cli, then navigate to the project folder and use truffle commands - or review contract code using an editor of your choice. See the notice above before running the ``'truffle test'`` command.
 
+### App Interaction
+The front end of this applicaiton is a work in progress but using ganache as a test blockchain we can demonstrate how to set up contract interaction between a running instance of the contract and a browser. To download web3 into the frontDemo folder,
+navigate to the folder in a terminal, then run
+  ```
+  npm install web3@0.19.1 --save
+  ```
+  This should give the required web3 package to be able to interact with  
