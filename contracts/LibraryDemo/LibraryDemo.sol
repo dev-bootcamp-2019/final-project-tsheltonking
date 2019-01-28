@@ -27,6 +27,4 @@ contract LibraryDemo is Ownable {
         return count;
     }
 
-
-
 }
